@@ -1,0 +1,150 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class ToDoListApplication {
+    -static final int MIN_WIDTH = 640
+    -static final int MIN_HEIGHT = 450
+    +void start(Stage stage) throws Exception
+    +void main(String[] args)
+}
+
+class FXMLController {
+    -Vbox viewPane
+    -ToDoListControl currentListControl
+
+    -TextField taskCreatorTaskName
+    -TextField taskCreatorDueDate
+    -TextField taskCreatorDescription
+    -Button createTaskButton
+
+
+    +void initialize(URL url, ResourceBundle rb)
+
+    +void viewAllTasks()
+    +void viewCompletedTasks()
+    +void viewUncompletedTasks()
+    +void sortTasksByDate()
+
+    +void setActiveList()
+
+    +void addTask()
+    +void removeSelectedTasks()
+    +void removeAllTasks()
+
+    +void openAllTasks()
+    +void collapseAllTasks()
+
+    +void addToDoList()
+    +void saveToDoList()
+    +void loadToDoList()
+}
+
+' control object for list in left pane
+class ToDoListControl {
+
+    -final int LIST_CAPACITY = 100 // task capacity
+    -int size = 0
+    ' store the Task Container for this toDoList
+    -TaskContainerControl allTaskContainerControl
+    -TaskContainerControl selectedTaskContainerControl
+    -TaskContainerControl completedTaskContainerControl
+    -TaskContainerControl uncompletedTaskContainerControl
+
+    -void initializeContainers()
+    -void initializeGUI()
+    -void setButtonAction(TaskControl taskControl)
+
+    +void addTask(String description, String dueDate) throws exception
+    +void removeTask(TaskControl taskControl)
+    +void selectTask(TaskControl taskControl)
+    +void removeSelected()
+
+    +void toggleComplete(TaskControl taskControl)
+    +void markTaskComplete(TaskControl taskControl)
+    +void markTaskIncomplete(TaskControl taskControl)
+
+    +void viewAllTasks()
+    +void viewCompletedTasks()
+    +void viewUncompletedTasks()
+    +void viewTasksSortedByDate()
+
+    +void openAllTasks()
+    +void collapseAllTasks()
+    +void clearAllTasks()
+
+    +void editListTitle(String newTitle)
+
+}
+
+class ListHeaderControl {
+    -Label listTitle
+    -void initializeGUI(String title)
+    -void initializeLabel(String title)
+    +void changeTitle(String title)
+}
+
+class TaskContainerControl {
+    +void addTaskControl(TaskControl taskControl)
+    +void removeTaskControl(TaskControl taskControl)
+    +void initializeStyle()
+}
+
+class TaskControl {
+    +TaskControl(String description, String dueDate) throws exception
+    +TaskControl(String description) throws exception
+    -final int DESCRIPTION_LIMIT = 256;
+    -TitledPane taskTitledPane
+
+    -HBox optionsPane
+    -Button toggleCompleteButton
+    -Button editDescriptionButton
+    -Button editDueDateButton
+    -Button deleteTaskButton
+    -TextField textEditorField
+
+    -Label dueDateLabel
+
+    -boolean complete = false
+
+    +TaskControl(String description, String dueDate)
+    +TaskControl(String description)
+
+    +void setCollapsed(boolean collapsed)
+
+    +void editDescription(String newDescription)
+    +void editDueDate(String newDueDate)
+
+    +TitledPane getTaskTitledPane()
+    +Button getDeleteTaskButton()
+    +Button getToggleCompleteButton()
+    +String getDate()
+    +boolean getComplete()
+    +String getDescription()
+    +String getDueDate()
+
+
+    +void toggleComplete()
+
+    +boolean isDescriptionValid(String description)
+    +boolean isDueDateValid(String dueDate)
+
+    -void initializeGUI(String description, String dueDate)
+    -void initializeTitledPane(String description)
+    -void initializeDueDateLabel(String dueDate)
+
+    -void enterTaskEditorModeDescription()
+    -void enterTaskEditorModeDate()
+    -void exitTaskEditorMode()
+    -void showTextEditorField()
+}
+
+class FileManager {
+    +void saveListToFile(ToDoListControl listControl, String filepath) throws IOException
+    +ToDoListControl loadListFromFile(String filepath) throws IllegalArgumentException
+}
+
+FXMLController *-- ToDoListControl: contains 1
+ToDoListControl *-- TaskContainerControl: contains 1
+ToDoListControl *-- ListHeaderControl: contains 1
+TaskContainerControl *-- TaskControl: (extended from Vbox) displays list of
+@enduml
