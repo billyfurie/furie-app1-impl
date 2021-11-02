@@ -7,6 +7,7 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -18,32 +19,43 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #2a2a2a;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="baseline.FXMLController">
+<BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #2a2a2a;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="baseline.FXMLController">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <menus>
                 <Menu mnemonicParsing="false" text="File">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Create New List" />
-                  <MenuItem mnemonicParsing="false" text="Save" />
-                  <MenuItem mnemonicParsing="false" text="Load" />
+                        <MenuItem fx:id="createNewListMenuItem" mnemonicParsing="false" onAction="#createNewToDoList" text="Create New List" />
+                  <MenuItem fx:id="saveListMenuItem" mnemonicParsing="false" onAction="#saveToDoList" text="Save List" />
+                  <MenuItem fx:id="loadListMenuItem" mnemonicParsing="false" onAction="#loadToDoList" text="Load List" />
                     </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="List">
+            <Menu mnemonicParsing="false" text="View">
+               <items>
+                        <MenuItem mnemonicParsing="false" onAction="#viewAllTasks" text="Show All Tasks" />
+                        <MenuItem mnemonicParsing="false" onAction="#viewCompletedTasks" text="Show Completed Tasks" />
+                        <MenuItem mnemonicParsing="false" onAction="#viewUncompletedTasks" text="Show Uncompleted Tasks" />
+               </items>
+            </Menu>
+                <Menu mnemonicParsing="false" text="Sort">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Show All Tasks" />
-                        <MenuItem mnemonicParsing="false" text="Show Completed Tasks" />
-                        <MenuItem mnemonicParsing="false" text="Show Uncompleted Tasks" />
-                  <MenuItem mnemonicParsing="false" text="Remove All Tasks" />
-                  <MenuItem mnemonicParsing="false" text="Sort By Date" />
+                  <MenuItem fx:id="sortByDateAscendingMenuItem" mnemonicParsing="false" onAction="#sortTasksByDateAscending" text="Sort By Date Ascending" />
+                  <MenuItem fx:id="sortByDateDescendingMenuItem" mnemonicParsing="false" onAction="#sortTasksByDateDescending" text="Sort By Date Descending" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Tasks">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Collapse All Tasks" />
-                        <MenuItem mnemonicParsing="false" text="Open All Tasks" />
-                        <MenuItem mnemonicParsing="false" text="Complete Selected" />
-                        <MenuItem mnemonicParsing="false" text="Remove Selected" />
+                        <MenuItem fx:id="collapseAllTasksMenuItem" mnemonicParsing="false" onAction="#collapseAllTasks" text="Collapse All Tasks" />
+                        <MenuItem fx:id="openAllTasksMenuItem" mnemonicParsing="false" onAction="#openAllTasks" text="Open All Tasks" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem fx:id="selectAllTasksMenuItem" mnemonicParsing="false" onAction="#selectAllTasks" text="Select All Tasks" />
+                  <MenuItem fx:id="deselectAllTasksMenuItem" mnemonicParsing="false" onAction="#deselectAllTasks" text="Deselect All Tasks" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="markSelectedTasksComplete" mnemonicParsing="false" onAction="#markSelectedTasksComplete" text="Mark Selected As Complete" />
+                        <MenuItem fx:id="markSelectedTasksIncomplete" mnemonicParsing="false" onAction="#markSelectedTasksIncomplete" text="Mark Selected As Incomplete" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem fx:id="removeSelectedTasksMenuItem" mnemonicParsing="false" onAction="#removeSelectedTasks" text="Remove Selected" />
+                  <MenuItem fx:id="removeAllTasksMenuItem" mnemonicParsing="false" onAction="#removeAllTasks" text="Remove All Tasks" />
                     </items>
                 </Menu>
             </menus>
@@ -71,7 +83,7 @@
                             <children>
                                 <HBox maxWidth="1.7976931348623157E308">
                                     <children>
-                                        <TextField fx:id="taskCreatorTaskName" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="38.0" promptText="Task Description (1 - 256 Characters)" style="-fx-background-color: #383838; -fx-text-fill: white;" HBox.hgrow="ALWAYS">
+                                        <TextField fx:id="taskCreatorDescription" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="38.0" promptText="Task Description (1 - 256 Characters)" style="-fx-background-color: #383838; -fx-text-fill: white;" HBox.hgrow="ALWAYS">
                                             <font>
                                                 <Font name="System Italic" size="14.0" />
                                             </font>
@@ -155,17 +167,17 @@
                                                       <Insets bottom="8.0" right="8.0" />
                                                    </HBox.margin>
                                                 </Button>
-                                                <Button layoutX="71.0" layoutY="16.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="TaskOptionsButton" text="Delete Task" textFill="#cd1c1c">
+                                                <Button layoutX="71.0" layoutY="16.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="TaskOptionsButton" text="Delete Task" textFill="#cd1c1c" HBox.hgrow="ALWAYS">
                                                    <font>
                                                       <Font name="System Bold" size="14.0" />
                                                    </font>
                                                    <HBox.margin>
-                                                      <Insets bottom="8.0" />
+                                                      <Insets bottom="8.0" right="8.0" />
                                                    </HBox.margin>
                                                 </Button>
                                                 <TextField maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="400.0" promptText="Enter a new description / date" styleClass="TaskOptionsTextBox">
                                                    <HBox.margin>
-                                                      <Insets bottom="6.0" left="8.0" />
+                                                      <Insets bottom="6.0" />
                                                    </HBox.margin>
                                                    <font>
                                                       <Font size="14.0" />
@@ -544,8 +556,28 @@
                 </VBox>
             </children>
             <BorderPane.margin>
-                <Insets bottom="12.0" left="16.0" right="16.0" />
+                <Insets bottom="8.0" left="16.0" right="16.0" />
             </BorderPane.margin>
         </GridPane>
     </center>
+   <bottom>
+      <HBox alignment="CENTER" styleClass="BottomAlert" stylesheets="@styles.css" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <children>
+            <Label fx:id="alertLabel" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" textAlignment="CENTER" textFill="#40549e">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+               <padding>
+                  <Insets bottom="4.0" />
+               </padding>
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+   </bottom>
 </BorderPane>

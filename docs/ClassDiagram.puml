@@ -1,7 +1,7 @@
 @startuml
 'https://plantuml.com/class-diagram
 
-class ToDoListApplication {
+class TodoListApplication {
     -static final int MIN_WIDTH = 640
     -static final int MIN_HEIGHT = 450
     +void start(Stage stage) throws Exception
@@ -9,142 +9,244 @@ class ToDoListApplication {
 }
 
 class FXMLController {
-    -Vbox viewPane
-    -ToDoListControl currentListControl
-
-    -TextField taskCreatorTaskName
+    -BorderPane mainPane
+    -VBox viewPane
+    -Label alertLabel
     -TextField taskCreatorDueDate
     -TextField taskCreatorDescription
-    -Button createTaskButton
-
+    -ToDoListControl currentListControl
 
     +void initialize(URL url, ResourceBundle rb)
+    +void initializeMainPane()
+    +void initializeTaskEditorFields()
 
     +void viewAllTasks()
     +void viewCompletedTasks()
     +void viewUncompletedTasks()
-    +void sortTasksByDate()
 
-    +void setActiveList()
+    +void sortTasksByDateAscending()
+    +void sortTasksByDateDescending()
 
+    +void setActiveList(ToDoListControl listControl)
     +void addTask()
+
     +void removeSelectedTasks()
     +void removeAllTasks()
 
+    +void markSelectedTasksComplete()
+    +void markSelectedTasksIncomplete()
+
     +void openAllTasks()
     +void collapseAllTasks()
+    +void selectAllTasks()
+    +void deselectAllTasks()
 
-    +void addToDoList()
+    +void createNewToDoList()
+
+    +void displayAlertMessage(String message)
+
     +void saveToDoList()
     +void loadToDoList()
 }
 
 ' control object for list in left pane
 class ToDoListControl {
-
-    -final int LIST_CAPACITY = 100 // task capacity
+    -static final int LIST_CAPACITY = 100
     -int size = 0
-    ' store the Task Container for this toDoList
+    -ListHeaderControl listHeaderControl
+    -ScrollPane tasksScrollPane
+    -final Label alertLabel
+    -final ToDoList toDoList
     -TaskContainerControl allTaskContainerControl
-    -TaskContainerControl selectedTaskContainerControl
-    -TaskContainerControl completedTaskContainerControl
-    -TaskContainerControl uncompletedTaskContainerControl
 
-    -void initializeContainers()
-    -void initializeGUI()
-    -void setButtonAction(TaskControl taskControl)
+    +ToDoListControl(Label alertLabel)
+    +void addTask(String description, String dueDate)
+    +void addTaskControl(TaskControl taskControl)
 
-    +void addTask(String description, String dueDate) throws exception
     +void removeTask(TaskControl taskControl)
     +void selectTask(TaskControl taskControl)
     +void removeSelected()
 
     +void toggleComplete(TaskControl taskControl)
-    +void markTaskComplete(TaskControl taskControl)
-    +void markTaskIncomplete(TaskControl taskControl)
+    +void markSelectedTasksComplete()
+    +void markSelectedTasksIncomplete()
 
-    +void viewAllTasks()
-    +void viewCompletedTasks()
-    +void viewUncompletedTasks()
-    +void viewTasksSortedByDate()
-
+    +void selectAllTasks()
+    +void deselectAllTasks()
     +void openAllTasks()
     +void collapseAllTasks()
     +void clearAllTasks()
 
-    +void editListTitle(String newTitle)
+    +void viewAllTasks()
+    +void viewCompletedTasks()
+    +void viewUncompletedTasks()
+    +void viewTasksSortedByDate(boolean ascending)
 
+
+
+    +TaskContainerControl getAllTaskContainerControl()
+
+    -void initializeGUI()
+    -void initializeContainer()
+
+    -void setButtonActionDelete(TaskControl taskControl)
+    -void setButtonActionToggleComplete(TaskControl taskControl)
+    -void setActionSelectTask(TaskControl taskControl)
 }
 
 class ListHeaderControl {
-    -Label listTitle
+    +ListHeaderControl(String listTitle)
+    -final Label listTitle
     -void initializeGUI(String title)
     -void initializeLabel(String title)
     +void changeTitle(String title)
 }
 
 class TaskContainerControl {
+    +TaskContainerControl()
     +void addTaskControl(TaskControl taskControl)
     +void removeTaskControl(TaskControl taskControl)
     +void initializeStyle()
 }
 
 class TaskControl {
-    +TaskControl(String description, String dueDate) throws exception
-    +TaskControl(String description) throws exception
-    -final int DESCRIPTION_LIMIT = 256;
-    -TitledPane taskTitledPane
+    -static final int DESCRIPTION_LIMIT = 256
+    -static final String BUTTON_TEXT_COMPLETE = "Mark Complete"
+    -static final String BUTTON_TEXT_INCOMPLETE = "Mark Incomplete"
+    -static final String TEXT_EDITOR_PROMPT_DATE = "Enter a new due date"
+    -static final String TEXT_EDITOR_PROMPT_DESCRIPTION = "Enter a new description"
+    -static final String TITLED_PANE_STYLE_CLASS = "TitledPane"
+    -static final String SYSTEM_FONT = "System"
 
+    -TitledPane taskTitledPane
     -HBox optionsPane
     -Button toggleCompleteButton
     -Button editDescriptionButton
     -Button editDueDateButton
     -Button deleteTaskButton
     -TextField textEditorField
-
     -Label dueDateLabel
 
     -boolean complete = false
+    -boolean selected = false
 
-    +TaskControl(String description, String dueDate)
-    +TaskControl(String description)
+    -final Task task
+    -final Label alertLabel
 
-    +void setCollapsed(boolean collapsed)
-
-    +void editDescription(String newDescription)
-    +void editDueDate(String newDueDate)
-
-    +TitledPane getTaskTitledPane()
-    +Button getDeleteTaskButton()
-    +Button getToggleCompleteButton()
-    +String getDate()
-    +boolean getComplete()
-    +String getDescription()
-    +String getDueDate()
-
-
-    +void toggleComplete()
-
-    +boolean isDescriptionValid(String description)
-    +boolean isDueDateValid(String dueDate)
+    +TaskControl(String description, String dueDate, Label alertLabel) throws InvalidParameterException
 
     -void initializeGUI(String description, String dueDate)
     -void initializeTitledPane(String description)
     -void initializeDueDateLabel(String dueDate)
+    -void initializeOptionsPane()
+    -void initializeTextEditorField()
 
     -void enterTaskEditorModeDescription()
     -void enterTaskEditorModeDate()
     -void exitTaskEditorMode()
     -void showTextEditorField()
+
+    -void setNodeVisible(Node node, boolean visible)
+    +void setCollapsed(boolean collapsed)
+
+    +void editDescription(String newDescription) throws DescriptionInvalidException
+    +void editDueDate(String newDueDate) throws DateInvalidException
+
+    -void displayAlertMessage(String message)
+
+    +TitledPane getTaskTitledPane()
+    +Button getDeleteTaskButton()
+    +Button getToggleCompleteButton()
+    +void toggleComplete()
+    +void toggleSelect()
+    +boolean getComplete()
+    +boolean getSelected()
+    +String getDueDate()
+    +String getDescription()
+    +Task getTask()
+
+    +static boolean isDueDateValid(String dueDate)
+    +static boolean isDescriptionValid(String description)
 }
 
 class FileManager {
-    +void saveListToFile(ToDoListControl listControl, String filepath) throws IOException
-    +ToDoListControl loadListFromFile(String filepath) throws IllegalArgumentException
+    +void saveListToFile(ToDoListControl listControl, File file) throws IOException
+    +void saveArrayListToFile(List<Task> tasks, File file) throws IOException
+    +List<Task> loadArrayListFromFile(File file) throws IOException
+    +ToDoListControl loadListFromFile(File file, Label alertLabel) throws IOException
+    -ArrayList<Task> getDataFromListControl(ToDoListControl listControl)
+}
+
+class TaskOptionsButtonControl {
+    +public TaskOptionsButtonControl(String text)
+    -void initializeStyle()
+}
+
+class DateInvalidException {
+    +DateInvalidException()
+
+    This exception is for when a user tries to add an invalid date (Not YYYY-MM-DD or not a valid date)
+}
+
+class DescriptionInvalidException {
+    +DescriptionInvalidException()
+
+    This exception is for when a user tries to add an invalid description (Not 1-456 characters)
+}
+
+class ListFullException {
+    +ListFullException()
+
+    This exception is for when a user tries to add a task to a full list
+}
+
+class Task {
+    -String description
+    -String dueDate
+    -boolean complete
+    -boolean selected
+
+    +Task(String description, String dueDate, boolean complete, boolean selected)
+
+    +String getDescription()
+    +String getDueDate()
+    +boolean isComplete()
+    +boolean isSelected()
+    +void setComplete(boolean isComplete)
+    +void setSelected(boolean isSelected)
+    +void setDescription(String newDescription)
+    +void setDueDate(String newDueDate)
+}
+
+class ToDoList {
+    -final ArrayList<Task> tasks
+
+    +ToDoList()
+    +void addTask(Task task)
+    +void removeTask(Task task)
+    +boolean containsTask(Task task)
+    +void clearAllTasks()
+    +void markTaskComplete(Task task)
+    +void markTaskIncomplete(Task task)
+    +void selectTask(Task task)
+    +void deselectTask(Task task)
+    +List<Task> getTasks()
+    +List<Task> getCompletedTasks()
+    +List<Task> getUncompletedTasks()
 }
 
 FXMLController *-- ToDoListControl: contains 1
-ToDoListControl *-- TaskContainerControl: contains 1
-ToDoListControl *-- ListHeaderControl: contains 1
+ToDoListControl *-- TaskContainerControl: (extended from Vbox) displays 1
+ToDoListControl *-- ListHeaderControl: (extended from Hbox) displays 1
+ToDoListControl *-- ToDoList: contains 1
+ToDoList *-- Task: contains ArrayList of
+TaskControl *-- Task: contains 1
+InvalidParameterException <|-- DateInvalidException
+InvalidParameterException <|-- DescriptionInvalidException
+InvalidParameterException <|-- ListFullException
+ToDoListControl .. InvalidParameterException: throws
+FXMLController .. FileManager: uses
+TodoListApplication .. FXMLController
 TaskContainerControl *-- TaskControl: (extended from Vbox) displays list of
+TaskControl *-- TaskOptionsButtonControl: (extended from Button) displays several
 @enduml

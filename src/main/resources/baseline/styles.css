@@ -73,10 +73,57 @@
     -fx-border-width: 0;
 }
 
+
+/* COMPLETE TASK DESIGN */
+/* -------------------- */
+.TitledPaneComplete .title{
+    -fx-background-color: gray;
+    -fx-border-style: hidden hidden hidden solid;
+    -fx-border-width: 5;
+    -fx-border-color: linear-gradient(to bottom right, #2b5876, #4e4376);;
+}
+
+.TitledPaneComplete .title .text{
+    -fx-fill: #A9A9A9;
+}
+
+.TitledPaneComplete .title .arrow-button .arrow{
+    -fx-background-color: linear-gradient(to bottom right, #2b5876, #4e4376);
+}
+
+/* Removes Border Here */
+.TitledPaneComplete > *.content {
+    -fx-border-width: 0;
+}
+
+/* SELECTED TASK DESIGN */
+/* -------------------- */
+.TitledPaneSelected .title{
+    -fx-background-color: #202020;
+    -fx-border-style: solid solid solid solid;
+    -fx-border-width: 5;
+    -fx-border-color: linear-gradient(to bottom right, #2b5876, #4e4376);;
+}
+
+.TitledPaneSelected .title .text{
+    -fx-fill: #A9A9A9;
+}
+
+.TitledPaneSelected .title .arrow-button .arrow{
+    -fx-background-color: linear-gradient(to bottom right, #2b5876, #4e4376);
+}
+
+/* Removes Border Here */
+.TitledPaneSelected > *.content {
+    -fx-border-width: 0;
+}
+
+
 /* Due Date on Task */
 .TitleDueDate {
     -fx-text-fill: #A9A9A9;
 }
+
 
 /* For our text area -- only in descriptions as of now */
 .text-area {
